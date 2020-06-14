@@ -64,7 +64,7 @@ func applyDefaults(pod *api.Pod, source string, isFile bool, nodeName types.Node
 
 	if pod.Annotations != nil && pod.Annotations["kubernetes.io/static-pod-name"] != "" {
 		pod.Name = string(pod.Annotations["kubernetes.io/static-pod-name"])
-	} else {
+	} else if pod.Annotations == nil || pod.Annotations["kubernetes.io/static-pod-name-preserve"] != "true" {
 		pod.Name = generatePodName(pod.Name, nodeName)
 	}
 	klog.V(5).Infof("Generated Name %q for UID %q from URL %s", pod.Name, pod.UID, source)
